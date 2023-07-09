@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+label<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -41,16 +41,15 @@
                 justify-content: center;
                 align-items: center;
             }
-
         </style>
     </head>
     <body>
         <div id="app">
             {{greeting}}
-            <input v-model="greeting">
-            <!-- v-model sẽ nhìn vào app so sánh có dữ liệu thì hiển thị, và nội dung ở ô input thay đổi cũng sẽ truyền ngược lại cho app -->
+            <input v-model="greeting" />
+            <!-- v-model sẽ nhìn vào script của app vào data so sánh có dữ liệu thì hiển thị, và nội dung ở ô input thay đổi cũng sẽ truyền ngược lại cho app -->
 
-            <hr>
+            <hr />
 
             <div v-if="isVisible" class="box"></div>
             <div v-show="isVisible" class="box"></div>
@@ -64,53 +63,51 @@
             <!-- Nếu cả 2 cáo trên không thỏa, thì là chỉ còn trường hợp là màu xanh blue -->
             <div v-else class="boxIf three"></div>
 
-
             <!-- Làm một nút ẩn hiện hình với onClick -->
             <div v-if="show" class="square"></div>
             <button v-on:click="show=!show">Show/Hide or Toggle Box</button>
             <button @click="show=!show">Show/Hide or Toggle Box</button>
             <!-- có thể rút gọn v-on:click thành @click -->
 
-
             <!-- Tìm hiểu về methods -->
             <div v-if="cricle" class="cricle"></div>
             <button @click="toggleCricle">Toggle Cricle</button>
 
-            <br>
-            <br>
-            <br>
-            <br>
-            
+            <br />
+            <br />
+            <br />
+            <br />
+
             <!-- Tìm hiểu về @keyup và @keydown: Dùng kích hoạt sự kiện để lắng nghe nhả phím và lắng nghe sự kiện nhấn phím -->
             {{writing}}
-            <input @keyup.enter="write" type="text" v-model="writing">
-            
-            <br>
-            <br>
-            <br>
-            <br>
+            <input @keyup.enter="write" type="text" v-model="writing" />
+
+            <br />
+            <br />
+            <br />
+            <br />
 
             <!-- có tham số truyền vào -->
             {{writing2}}
-            <input @keyup.enter="write2(writing2 + '!!!')" type="text" v-model="writing2">
-
+            <input
+                @keyup.enter="write2(writing2 + '!!!')"
+                type="text"
+                v-model="writing2"
+            />
 
             <!-- @click.prevent.stop ngăn cản sự kiện gì đó diễn ra, chẳng hạn submit form -->
-
 
             <!-- Form -->
             <login-form />
         </div>
 
-
-
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         <script>
             let app = Vue.createApp({
-                data: function(){
+                data: function () {
                     return {
                         // v-model
-                        greeting: 'Hello vue3!',
+                        greeting: "Hello vue3!",
 
                         // v-if và v-show
                         isVisible: false,
@@ -123,9 +120,9 @@
                         // v-cloak
                         /**
                          * Khi một template của Vue được tải, có thể sẽ có một chút độ trễ trước khi nó được biên dịch và hiển thị hoàn toàn. Trong thời gian này, người dùng có thể thấy template chưa được biên dịch, điều này có thể gây mất thẩm mỹ và chuyên nghiệp.
-                         * 
+                         *
                          * Ví dụ: loading... hoặc skeleton
-                        */
+                         */
 
                         // Events & Methods
                         show: false,
@@ -133,51 +130,92 @@
 
                         // học về keyup keydown
                         writing: "Học về keydown",
-                        writing2: "Học về keydown nhưng có tham số truyền vào"
-                    }
+                        writing2: "Học về keydown nhưng có tham số truyền vào",
+                    };
                 },
                 methods: {
-                    toggleCricle(){
+                    toggleCricle() {
                         this.cricle = !this.cricle;
                     },
-                    write(){
-                        console.log(this.writing)
+                    write() {
+                        console.log(this.writing);
                     },
-                    write2(writing2){
-                        console.log(writing2)
+                    write2(writing2) {
+                        console.log(writing2);
                     },
-                } 
-            })
+                },
+            });
 
             // Component
             // Vấn đề diễn ra khi nhấn vào button trang bị load lại
             // Chính vì vậy khi dùng @submit thì cần phải bổ sung thêm @submit.prevent
-            // Cách giải quyết: Cách 1: là bổ sung trong form là @submit.prevent 
-            app.component('login-form', {
+            // Cách giải quyết: Cách 1: là bổ sung trong form là @submit.prevent
+
+            // V-bind Khi sử dụng v-bind, chúng ta có thể liên kết giá trị của một thuộc tính HTML với một giá trị trong instance Vue.
+            // v-bind cũng có thể viết tắt :
+            app.component("login-form", {
                 template: `
                     <form @submit.prevent="handleSubmit" className="form-input">
                         <h1>{{ title }}</h1>
-                        <input type="email" v-model="email" />
-                        <input type="password" v-model="password"/>
+                        <custom-input v-model="email" v-bind:label="emailLabel" />
+                        <custom-input v-model="password" :label="passwordLabel"/>
                         <button>Log in</button>
                     </form>
                 `,
-                data(){
+                component: ["custom-input"],
+                data() {
                     return {
-                        title: 'Login Form',
-                        email: '',
-                        password: ''
-                    }
+                        title: "Login Form",
+                        email: "",
+                        password: "",
+                        emailLabel: "Email",
+                        passwordLabel: "Password",
+                    };
                 },
-                methods:{
+                methods: {
                     handleSubmit() {
-                        console.log('submitted')
-                        console.log("Đây là username:",this.email, "-" ,"Đây là password:", this.password)
+                        console.log("submitted");
+                        console.log(
+                            "Đây là username:",
+                            this.email,
+                            "-",
+                            "Đây là password:",
+                            this.password
+                        );
+                    },
+                },
+            });
+
+            app.component("custom-input", {
+                template: `
+                    <label>
+                        {{label}}
+                        <input type="text" v-model="inputValue" />
+                    </label>
+                `,
+                // props Dùng để nhận dữ liệu được truyền từ data của component custom-input
+                props: ["label", "modelValue"],
+                computed: {
+                    inputValue: {
+                        get(){
+                            return this.modelValue
+                        },
+                        set(value){
+                            // console.log(value);
+                            // $emit là một phương thức có sẵn trong Vue.js được sử dụng để phát ra một sự kiện từ một component con tới component cha của nó.
+                            // Khi một component con cần thông báo cho component cha về một sự kiện đã xảy ra, nó có thể sử dụng $emit để phát ra sự kiện đó. Khi đó, component cha sẽ lắng nghe sự kiện này và có thể thực hiện các hành động phù hợp.
+                            // Phương thức $emit nhận hai tham số: tên sự kiện và dữ liệu liên quan đến sự kiện. Ví dụ, khi một component con cần thông báo cho component cha rằng một button đã được click
+                            this.$emit('update:modelValue', value)
+                        }
                     }
                 }
-            })
-
-            app.mount('#app')
+                // data() {
+                //     return {
+                //         inputValue: ''
+                //     }
+                // }
+            });
+            app.mount("#app");
         </script>
     </body>
 </html>
